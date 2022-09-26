@@ -136,7 +136,7 @@ export async function getServerSideProps(context: NextPageContext) {
   const lastFetchDate = dayjs(config.lastModificationDate);
   const diff = currentDate.diff(lastFetchDate, "hour");
 
-  if (diff >= 1) {
+  if (diff >= 5) {
     const data = await getGoldPrices();
     if (!data) {
       return {
