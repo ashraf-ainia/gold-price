@@ -6,7 +6,7 @@ export default async function (): Promise<apiBaseResponse | false> {
         const data: apiBaseResponse = await res.json();
         return data;
     } catch (e) {
-        console.log('getGoldPrices error: ', e, e.message);
+        console.log('getGoldPrices error: ', e);
         return false;
     }
 }
