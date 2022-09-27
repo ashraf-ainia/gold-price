@@ -44,7 +44,9 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
               width={300}
               height={271}
             />
-            <p>1 Gram</p>
+            <p>
+              1 Gram <sub>(24 karat)</sub>
+            </p>
             <div className={styles.pricesTableContainer}>
               <table>
                 <thead>
