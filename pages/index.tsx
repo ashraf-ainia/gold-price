@@ -40,7 +40,7 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Gold Price Today</h1>
-        <p className={styles.subtitle}>{lastUpdate}</p>
+        <p className={styles.subtitle}>{lastUpdate} (Saudi Arabia Time)</p>
         <div className={styles["grid-container"]}>
           <div className={styles.grid + " " + styles.centerContent}>
             <Image
