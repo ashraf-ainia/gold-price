@@ -79,6 +79,10 @@
   padding: 8px;
 }
 
+.img {
+  padding: 0px;
+}
+
 @media (prefers-color-scheme: dark) {
   .card,
   .footer {
@@ -87,7 +91,8 @@
   .code {
     background: #111;
   }
-  .logo img {
+  .logo img,
+  .footer .img {
     filter: invert(1);
   }
 }

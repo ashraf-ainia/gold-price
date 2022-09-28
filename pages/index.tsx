@@ -1,7 +1,9 @@
-import type { NextPage, NextPageContext } from "next";
+import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 import { getConfig, updateConfig } from "../services/db/config";
 import { addPrice, getLastAddedPrice } from "../services/db/prices";
@@ -9,6 +11,9 @@ import styles from "../styles/Home.module.css";
 import connectToDb from "../services/db/connectToDb";
 import getGoldPrices from "../services/api/getGoldPrices";
 import flags from "../constants/flags";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 type Price = {
   currency: string;
@@ -19,9 +24,10 @@ type Price = {
 type iProps = {
   prices: Price[];
   lastUpdate: string;
+  now: string;
 };
 
-const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
+const Home: NextPage<iProps> = ({ prices, lastUpdate, now }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -35,7 +41,11 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Gold Price Today</h1>
-        <p className={styles.subtitle}>{lastUpdate}</p>
+        <p className={styles.subtitle}>
+          {lastUpdate}
+          <br />
+          {now}
+        </p>
         <div className={styles["grid-container"]}>
           <div className={styles.grid + " " + styles.centerContent}>
             <Image
@@ -119,6 +129,7 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
           <Image
             src="/github_logo.png"
             alt="Github logo"
+            className={styles.img}
             width={20}
             height={20}
           />
@@ -128,17 +139,21 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
+export async function getServerSideProps() {
   let pricesResults = {};
   const client = await connectToDb();
   const config = await getConfig(client);
 
   // check if last data fetch is done before 7 hours
-  const currentDate = dayjs();
+  const currentDate = dayjs.tz(
+    dayjs().add(3, "hours").format("YYYY/MMM/DD HH:mm"),
+    "Asia/Riyadh"
+  );
+
   const lastFetchDate = dayjs(config.lastModificationDate);
   const diff = currentDate.diff(lastFetchDate, "hour");
 
-  if (diff >= 5) {
+  if (diff >= parseInt(process.env.TIME_DELAY_IN_HOURS as string)) {
     const data = await getGoldPrices();
     if (!data) {
       return {
@@ -182,6 +197,7 @@ export async function getServerSideProps(context: NextPageContext) {
     props: {
       prices,
       lastUpdate: lastFetchDate.format("YYYY/MMM/DD HH:mm"),
+      now: currentDate.toDate().toString(),
     },
   };
 }
