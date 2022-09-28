@@ -144,10 +144,9 @@ export async function getServerSideProps() {
   const client = await connectToDb();
   const config = await getConfig(client);
 
-  // check if last data fetch is done before 7 hours
-  const currentDate = dayjs.tz(
-    dayjs().add(3, "hours").format("YYYY/MMM/DD HH:mm"),
-    "Asia/Riyadh"
+  // check if last data fetch is done before TIME_DELAY_IN_HOURS hours
+  const currentDate = dayjs(
+    dayjs().add(6, "hours").format("YYYY/MMM/DD HH:mm")
   );
 
   const lastFetchDate = dayjs(config.lastModificationDate);
@@ -197,7 +196,7 @@ export async function getServerSideProps() {
     props: {
       prices,
       lastUpdate: lastFetchDate.format("YYYY/MMM/DD HH:mm"),
-      now: currentDate.toDate().toString(),
+      now: dayjs().toDate().toString(),
     },
   };
 }
