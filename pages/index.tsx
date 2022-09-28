@@ -24,10 +24,9 @@ type Price = {
 type iProps = {
   prices: Price[];
   lastUpdate: string;
-  now: string;
 };
 
-const Home: NextPage<iProps> = ({ prices, lastUpdate, now }) => {
+const Home: NextPage<iProps> = ({ prices, lastUpdate }) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -41,11 +40,7 @@ const Home: NextPage<iProps> = ({ prices, lastUpdate, now }) => {
 
       <main className={styles.main}>
         <h1 className={styles.title}>Gold Price Today</h1>
-        <p className={styles.subtitle}>
-          {lastUpdate}
-          <br />
-          {now}
-        </p>
+        <p className={styles.subtitle}>{lastUpdate}</p>
         <div className={styles["grid-container"]}>
           <div className={styles.grid + " " + styles.centerContent}>
             <Image
@@ -145,8 +140,9 @@ export async function getServerSideProps() {
   const config = await getConfig(client);
 
   // check if last data fetch is done before TIME_DELAY_IN_HOURS hours
+  // adding 3 hours because of Asia/Riyadh timezone and vercel server is using utc
   const currentDate = dayjs(
-    dayjs().add(6, "hours").format("YYYY/MMM/DD HH:mm")
+    dayjs().add(3, "hours").format("YYYY/MMM/DD HH:mm")
   );
 
   const lastFetchDate = dayjs(config.lastModificationDate);
@@ -196,7 +192,6 @@ export async function getServerSideProps() {
     props: {
       prices,
       lastUpdate: lastFetchDate.format("YYYY/MMM/DD HH:mm"),
-      now: dayjs().toDate().toString(),
     },
   };
 }
