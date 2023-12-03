@@ -25,8 +25,8 @@ const Privacy = () => {
 
         <p>
           إذا كان لديك أي أسئلة إضافية أو استفسارات حول سياسة الخصوصية، يرجى .
-          <Link href="/SadBlocker/Support" style={{ color: "blue" }}>
-            الاتصال بنا
+          <Link href="/SadBlocker/ContactUs" style={{ color: "blue" }}>
+            التواصل معنا
           </Link>
         </p>
       </div>
