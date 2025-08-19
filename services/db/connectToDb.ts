@@ -1,12 +1,13 @@
 import { MongoClient } from "mongodb";
 
+
+async function connectToDb() {
 // Connection URI
-const uri = `mongodb+srv://AshrafAinia:${process.env.DB_PASSWORD}@cluster0.zmqewk9.mongodb.net/?retryWrites=true&w=majority`;
+const uri = process.env.MONGODB_CONN || "";
 
 // Create a new MongoClient
 const client: MongoClient = new MongoClient(uri);
-
-async function connectToDb() {
+  
   try {
     // Connect the client to the server (optional starting in v4.7)
     await client.connect();
